@@ -9,16 +9,24 @@ class CharactersCommandsViewModel {
   final CharactersStateViewmodel state;
   final GetAllCharactersCommand _getAccountCommand;
   final CreateCharacterCommand _createCharacterCommand;
+  final DeleteCharacterCommand _deleteCharacterCommand;
+  final UpdateCharacterCommand _updateCharacterCommand;
 
   CharactersCommandsViewModel({
     required this.state,
     required GetAllCharactersCommand getAccountCommand,
     required CreateCharacterCommand createCharacterCommand,
+    required DeleteCharacterCommand deleteCharacterCommand,
+    required UpdateCharacterCommand updateCharacterCommand,
   }) : _getAccountCommand = getAccountCommand,
-       _createCharacterCommand = createCharacterCommand {
+       _createCharacterCommand = createCharacterCommand,
+       _deleteCharacterCommand = deleteCharacterCommand,
+       _updateCharacterCommand = updateCharacterCommand {
     // Observers para cada comando
     _observeGetAllCharacters();
     _observeCreateCharacter();
+    _observeDeleteCharacter();
+    _observeUpdateCharacter();
   }
 
   // ========================================================
@@ -26,6 +34,8 @@ class CharactersCommandsViewModel {
   // ========================================================
   GetAllCharactersCommand get getAllCharactersCommand => _getAccountCommand;
   CreateCharacterCommand get createCharacterCommand => _createCharacterCommand;
+  DeleteCharacterCommand get deleteCharacterCommand => _deleteCharacterCommand;
+  UpdateCharacterCommand get updateCharacterCommand => _updateCharacterCommand;
 
   // ========================================================
   //   MÉTODO GENÉRICO DE OBSERVAÇÃO DE COMANDOS
@@ -83,6 +93,32 @@ class CharactersCommandsViewModel {
         final currentList = state.state.value;
         final newlist = [...currentList, newCharacter]; // Adiciona o novo personagem à lista
         state.state.value = newlist; 
+      },
+      onFailure: (err) =>
+          state.setMessage(err.msg), // registra o erro no estado
+    );
+  }
+
+  void _observeDeleteCharacter() {
+    _observeCommand<Character>(
+      _deleteCharacterCommand,
+      onSuccess: (deletedCharacter) {
+        final currentList = state.state.value;
+        final newlist = currentList.where((c) => c.id != deletedCharacter.id).toList();
+        state.state.value = newlist; 
+      },
+      onFailure: (err) =>
+          state.setMessage(err.msg), // registra o erro no estado
+    );
+  }
+
+  void _observeUpdateCharacter() {
+    _observeCommand<Character>(
+      _updateCharacterCommand,
+      onSuccess: (updatedCharacter) {
+        final currentlist = state.state.value;
+        final newList = currentlist.map((c) => c.id == updatedCharacter.id ? updatedCharacter : c).toList();
+        state.state.value = newList;
       },
       onFailure: (err) =>
           state.setMessage(err.msg), // registra o erro no estado

@@ -105,29 +105,6 @@ class CharactersStateViewmodel {
           .where((c) => selectedAlignments.value.contains(c.alignment))
           .toList();
     }
-
-    /// filtro level
-    // switch (levelFilter.value) {
-    //   case LevelFilter.below30:
-    //     filtered = filtered.where((c) => c.level < 30).toList();
-    //     break;
-
-    //   case LevelFilter.below60:
-    //     filtered = filtered.where((c) => c.level < 60).toList();
-    //     break;
-
-    //   case LevelFilter.upTo70:
-    //     filtered = filtered.where((c) => c.level <= 70).toList();
-    //     break;
-
-    //   case LevelFilter.max80:
-    //     filtered = filtered.where((c) => c.level == 80).toList();
-    //     break;
-
-    //   case LevelFilter.all:
-    //     break;
-    // }
-
     filtered = filtered.where((c) => levelFilter.value.match(c.level)).toList();
 
     return filtered;
@@ -144,46 +121,9 @@ class CharactersStateViewmodel {
 
       return sortOrder.value == SortOrder.ascending ? result : -result;
     });
-
-    // switch (sortBy.value) {
-    //   case SortBy.name:
-    //     list.sort((a, b) {
-    //       final compare = a.name.compareTo(b.name);
-    //       return sortOrder.value == SortOrder.ascending ? compare : -compare;
-    //     });
-    //     break;
-
-    //   case SortBy.level:
-    //     list.sort((a, b) {
-    //       final compare = a.level.compareTo(b.level);
-    //       return sortOrder.value == SortOrder.ascending ? compare : -compare;
-    //     });
-    //     break;
-
-    //   case SortBy.stars:
-    //     list.sort((a, b) {
-    //       final compare = a.stars.compareTo(b.stars);
-    //       return sortOrder.value == SortOrder.ascending ? compare : -compare;
-    //     });
-    //     break;
-    // }
-
     return list;
   });
 
-  /// ------------------------------
-  /// HELPERS PARA UI
-  /// ------------------------------
-
-  /// Indica se existem filtros ativos
-  // late final hasActiveFilters = computed<bool>(() {
-  //   return selectedRarities.value.isNotEmpty ||
-  //       selectedClasses.value.isNotEmpty ||
-  //       selectedAlignments.value.isNotEmpty ||
-  //       levelFilter.value != LevelFilter.all;
-  // });
-
-  /// Quantidade de filtros ativos
   late final activeFiltersCount = computed<int>(() {
     int count = 0;
 

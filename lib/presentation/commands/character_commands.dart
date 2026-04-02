@@ -67,4 +67,22 @@ final class GetCharacterByIdCommand
 
     return await _characterFacadeUseCases.getCharacterById(parameter!);
   }
+
+}
+
+final class UpdateCharacterCommand
+    extends ParameterizedCommand<Character, Failure, CharacterIdParams> {
+  
+  final ICharacterFacadeUseCases _characterFacadeUseCases;
+
+  UpdateCharacterCommand(this._characterFacadeUseCases);
+
+  @override
+  Future<CharacterResult> execute() async {
+    if (parameter == null || parameter!.id.isEmpty) {
+      return Error(InputFailure('Parametro nulo para atualizar personagem.'));
+    }
+
+    return await _characterFacadeUseCases.updateCharacter(parameter!);
+  }
 }

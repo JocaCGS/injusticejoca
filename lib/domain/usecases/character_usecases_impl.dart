@@ -57,3 +57,15 @@ final class DeleteCharacterUseCaseImpl implements IDeleteCharacterUseCase {
     return _repository.deleteCharacter(params.id);
   }
 }
+
+final class UpdateCharacterUseCaseImpl implements IUpdateCharacterUseCase {
+  final ICharacterRepository _repository;
+
+  UpdateCharacterUseCaseImpl({required ICharacterRepository repository})
+    : _repository = repository;
+
+  @override
+  Future<CharacterResult> call(CharacterIdParams params) {
+    return _repository.updateCharacter(params.id);
+  }
+}

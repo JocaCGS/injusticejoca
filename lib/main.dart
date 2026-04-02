@@ -7,6 +7,7 @@ import 'core/theme/app_theme.dart' as AppTheme;
 import 'core/theme/theme_controller.dart';
 
 void main() {
+
   WidgetsFlutterBinding.ensureInitialized();
   setupDependencyInjection();
   final themeController = injector.get<ThemeController>();

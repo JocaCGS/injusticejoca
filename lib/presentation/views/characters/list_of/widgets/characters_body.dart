@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:injustice_app/core/typedefs/types_defs.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../domain/models/account_entity.dart';
 import '../../../../../domain/models/character_entity.dart';
@@ -63,7 +64,11 @@ class CharactersBody extends StatelessWidget {
                     final character = characters[index];
                     return CharacterListItem(
                       character: character,
-                      onDelete: () {},
+                      onDelete: () {
+                        viewModel.deleteCharacterCommand.executeWith(
+                          (id: character.id),
+                        );
+                      },
                       onTap: () {},
                     );
                   }, childCount: characters.length),
@@ -75,47 +80,6 @@ class CharactersBody extends StatelessWidget {
     });
   }
 }
-
-// class EmptyState extends StatelessWidget {
-//   const EmptyState({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: Padding(
-//         padding: const EdgeInsets.symmetric(
-//           horizontal: AppSpacing.xxl,
-//           vertical: AppSpacing.xxl,
-//         ),
-//         child: Column(
-//           // mainAxisSize: MainAxisSize.max,
-//           // mainAxisAlignment: MainAxisAlignment.start,
-//           children: [
-//             Icon(
-//               Icons.people_outline,
-//               size: 72,
-//               color: Theme.of(context).colorScheme.outline,
-//             ),
-//             const SizedBox(height: AppSpacing.md),
-//             Text(
-//               'Nenhum personagem encontrado',
-//               textAlign: TextAlign.center,
-//               style: context.textStyles.titleMedium?.semiBold,
-//             ),
-//             const SizedBox(height: AppSpacing.sm),
-//             Text(
-//               'Adicione seu primeiro personagem usando o botão +',
-//               textAlign: TextAlign.center,
-//               style: context.textStyles.bodyMedium?.withColor(
-//                 Theme.of(context).colorScheme.onSurfaceVariant,
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 /// Item da lista de personagens
 class CharacterListItem extends StatelessWidget {

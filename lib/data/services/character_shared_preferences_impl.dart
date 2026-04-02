@@ -14,10 +14,38 @@ final class CharacterSharedPreferencesService
   static const String _storageKey = 'characters';
 
   @override
-  Future<CharacterResult> deleteCharacter(String id) {
-    // TODO: implement deleteCharacter
-    throw UnimplementedError();
+  Future<CharacterResult> deleteCharacter(String id) async{
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final result = prefs.getString(_storageKey);
+
+      if (result == null) {
+        return Error(EmptyResultFailure());
+      }
+
+      final decoded = jsonDecode(result) as List<dynamic>;
+
+      final characters = decoded
+          .map((e) => CharacterMapper.fromMap(e as Map<String, dynamic>))
+          .toList();
+
+      Character removedCharacter = characters.firstWhere(
+        (c) => c.id == id,
+        orElse: () => throw Error(EmptyResultFailure())
+        );        
+
+      characters.removeWhere((c) => c.id == id);
+
+      await _saveCharacters(characters);
+
+      return Success(removedCharacter);
+    } catch (e) {
+      return Error(
+        ApiLocalFailure('Shared Preferences - Erro ao deletar personagem: $e'),
+      );
+    }
   }
+
 
   @override
   Future<ListCharacterResult> getAllCharacters() async {
@@ -89,4 +117,10 @@ final class CharacterSharedPreferencesService
       throw ApiLocalFailure('Erro ao salvar personagens: $e');
     }
   }
+
+  Future<CharacterResult> updateCharacter(String id) {
+     // TODO: implement getCharacterById
+    throw UnimplementedError();
+  }
 }
+  
