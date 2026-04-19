@@ -45,7 +45,7 @@ final class CharacterFacadeUseCasesImpl implements ICharacterFacadeUseCases {
   }
 
   @override
-  Future<CharacterResult> updateCharacter(CharacterIdParams params) {
+  Future<CharacterResult> updateCharacter(CharacterParams params) {
     return _updateCharacterUseCase(params);
   }
 }

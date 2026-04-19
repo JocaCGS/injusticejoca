@@ -34,4 +34,5 @@ class CharactersViewModel {
       commands.deleteCharacterCommand;
   UpdateCharacterCommand get updateCharacterCommand =>
       commands.updateCharacterCommand;
+
 }

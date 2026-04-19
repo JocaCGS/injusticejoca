@@ -19,7 +19,7 @@ final class CreateCharacterCommand
     }
 
     return await _characterFacadeUseCases.saveCharacter(parameter!);
-  }
+  } 
 }
 
 final class DeleteCharacterCommand
@@ -71,7 +71,7 @@ final class GetCharacterByIdCommand
 }
 
 final class UpdateCharacterCommand
-    extends ParameterizedCommand<Character, Failure, CharacterIdParams> {
+    extends ParameterizedCommand<Character, Failure, CharacterParams> {
   
   final ICharacterFacadeUseCases _characterFacadeUseCases;
 
@@ -79,10 +79,27 @@ final class UpdateCharacterCommand
 
   @override
   Future<CharacterResult> execute() async {
-    if (parameter == null || parameter!.id.isEmpty) {
+    if (parameter == null) {
       return Error(InputFailure('Parametro nulo para atualizar personagem.'));
     }
 
     return await _characterFacadeUseCases.updateCharacter(parameter!);
+  }
+}
+
+final class AddCharacterCommand
+    extends ParameterizedCommand<Character, Failure, CharacterParams> {
+  
+  final ICharacterFacadeUseCases _characterFacadeUseCases;
+
+  AddCharacterCommand(this._characterFacadeUseCases);
+
+  @override
+  Future<CharacterResult> execute() async {
+    if (parameter == null) {
+      return Error(InputFailure('Parametro nulo para adicionar personagem.'));
+    }
+
+    return await _characterFacadeUseCases.saveCharacter(parameter!);
   }
 }

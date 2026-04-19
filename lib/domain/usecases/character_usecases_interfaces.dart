@@ -10,4 +10,4 @@ abstract interface class ISaveCharacterUseCase
 abstract interface class IDeleteCharacterUseCase
     implements IUseCase<CharacterResult, CharacterIdParams> {}
 abstract interface class IUpdateCharacterUseCase
-    implements IUseCase<CharacterResult, CharacterIdParams> {}
+    implements IUseCase<CharacterResult, CharacterParams> {}

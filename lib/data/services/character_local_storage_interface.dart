@@ -6,5 +6,5 @@ abstract interface class ICharacterLocalStorage {
   Future<ListCharacterResult> getAllCharacters();
   Future<CharacterResult> getCharacterById(String id);
   Future<CharacterResult> deleteCharacter(String id);
-  Future<CharacterResult> updateCharacter(String id);
+  Future<CharacterResult> updateCharacter(Character character);
 }

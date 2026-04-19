@@ -65,7 +65,7 @@ final class UpdateCharacterUseCaseImpl implements IUpdateCharacterUseCase {
     : _repository = repository;
 
   @override
-  Future<CharacterResult> call(CharacterIdParams params) {
-    return _repository.updateCharacter(params.id);
+  Future<CharacterResult> call(CharacterParams params) {
+    return _repository.updateCharacter(params.character);
   }
 }

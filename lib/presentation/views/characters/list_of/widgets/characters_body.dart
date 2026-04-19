@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:injustice_app/core/typedefs/types_defs.dart';
+// import 'package:injustice_app/core/typedefs/types_defs.dart';
+// import 'package:injustice_app/presentation/views/character_edit_view.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../domain/models/account_entity.dart';
 import '../../../../../domain/models/character_entity.dart';
@@ -11,6 +12,8 @@ import '../../../../widgets/empty_state.dart';
 import '../../../../widgets/loading_indicator.dart';
 import '../../../../widgets/star_rating.dart';
 import 'package:signals_flutter/signals_flutter.dart';
+import '../../../../../core/routes/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class CharactersBody extends StatelessWidget {
   final CharactersViewModel viewModel;
@@ -69,7 +72,12 @@ class CharactersBody extends StatelessWidget {
                           (id: character.id),
                         );
                       },
-                      onTap: () {},
+                      onEdit: () {
+                        viewModel.charactersState.selectedCharacter.value = character; 
+                        context.pushNamed(
+                          AppRouteNames.charactersCreate,
+                        );
+                      },
                     );
                   }, childCount: characters.length),
                 ),
@@ -85,13 +93,13 @@ class CharactersBody extends StatelessWidget {
 class CharacterListItem extends StatelessWidget {
   final Character character;
   final VoidCallback onDelete;
-  final VoidCallback onTap;
+  final VoidCallback onEdit;
 
   const CharacterListItem({
     super.key,
     required this.character,
     required this.onDelete,
-    required this.onTap,
+    required this.onEdit,
   });
 
   @override
@@ -120,7 +128,7 @@ class CharacterListItem extends StatelessWidget {
       ),
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.startToEnd) {
-          onTap();
+          onEdit();
           return false;
         } else {
           return await showDialog<bool>(
@@ -152,7 +160,7 @@ class CharacterListItem extends StatelessWidget {
         color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.9),
         margin: const EdgeInsets.only(bottom: AppSpacing.md),
         child: InkWell(
-          onTap: onTap,
+          onTap: onEdit,
           borderRadius: BorderRadius.circular(AppRadius.md),
           child: Padding(
             padding: AppSpacing.paddingMd,

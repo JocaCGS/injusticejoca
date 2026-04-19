@@ -5,6 +5,7 @@ import '../../presentation/views/about_view.dart';
 import '../../presentation/views/account_create_view.dart';
 import '../../presentation/views/characters/list_of/characters_view.dart';
 import '../../presentation/views/home_view.dart';
+import '../../presentation/views/character_create_view.dart';
 
 /// Route names for easier referencing
 class AppRouteNames {
@@ -12,6 +13,8 @@ class AppRouteNames {
   static const about = 'about';
   static const accountCreate = 'account_create';
   static const characters = 'characters';
+  static const charactersCreate = 'characters_create';  
+  static const charactersEdit = 'characters_edit';  
 }
 
 /// Paths to keep URL structure consistent
@@ -20,6 +23,8 @@ class AppPaths {
   static const about = '/about';
   static const accountCreate = '/account-create';
   static const characters = '/characters';
+  static const charactersCreate = '/characters-create';
+  static const charactersEdit = '/characters-edit';
 }
 
 /// app routers using go_router
@@ -54,6 +59,12 @@ class AppRouter {
         name: AppRouteNames.about,
         pageBuilder: (context, state) =>
             const NoTransitionPage(child: AboutView()),
+      ),
+      GoRoute(
+        path: AppPaths.charactersCreate,
+        name: AppRouteNames.charactersCreate,
+        pageBuilder: (context, state) =>
+            const NoTransitionPage(child: CharacterCreateView()),
       ),
     ],
   );

@@ -21,6 +21,7 @@ enum CharacterClass {
         return 'Tecnológico';
     }
   }
+
 }
 
 enum CharacterRarity {
@@ -67,7 +68,7 @@ class Character extends Equatable {
   final int attack;
   final int health;
   final int stars;
-  final CharacterAlignment alignment;
+  final CharacterAlignment alignment; 
   final DateTime createdAt;
   final DateTime updatedAt;
 

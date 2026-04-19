@@ -54,7 +54,8 @@ final class CharacterSharedPreferencesService
       final result = prefs.getString(_storageKey);
 
       if (result == null || result.isEmpty) {
-        return Error(EmptyResultFailure());
+        // return Error(EmptyResultFailure());
+        return Success([]); // Retorna lista vazia se não houver dados
       }
 
       final decoded = jsonDecode(result) as List<dynamic>;
@@ -85,6 +86,7 @@ final class CharacterSharedPreferencesService
       return await currentResult.fold(
         onSuccess: (characters) async {
           final updatedCharacters = [...characters, character];
+          print('Salvando personagem: ${character.name}, ID: ${character.id}');
           await _saveCharacters(updatedCharacters);
           return Success(character);
         },
@@ -107,8 +109,9 @@ final class CharacterSharedPreferencesService
 
   /// Salva os personagens no storage
   Future<void> _saveCharacters(List<Character> characters) async {
+    print("GRAVANDO NO STORAGE: ${characters.length} personagens.");
     try {
-      final prefs = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();  
       final jsonString = json.encode(
         characters.map((c) => CharacterMapper.toMap(c)).toList(),
       );
@@ -118,9 +121,26 @@ final class CharacterSharedPreferencesService
     }
   }
 
-  Future<CharacterResult> updateCharacter(String id) {
-     // TODO: implement getCharacterById
-    throw UnimplementedError();
+  @override
+Future<CharacterResult> updateCharacter(Character character) async {
+  try {
+    final currentResult = await getAllCharacters();
+    
+    return await currentResult.fold(
+      onSuccess: (characters) async {
+        // Mapeia a lista trocando o antigo pelo novo
+        final updatedList = characters.map((c) => 
+          c.id == character.id ? character : c
+        ).toList();
+
+        await _saveCharacters(updatedList);
+        return Success(character);
+      },
+      onFailure: (failure) async => Error(failure),
+    );
+  } catch (e) {
+    return Error(ApiLocalFailure('Erro ao atualizar: $e'));
   }
 }
-  
+} 
+

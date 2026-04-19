@@ -74,6 +74,9 @@ class CharactersCommandsViewModel {
   // ========================================================
 
   /// Buscar todos os personagens
+  /// 
+  /// 
+  /// 
   void _observeGetAllCharacters() {
     _observeCommand<List<Character>>(
       _getAccountCommand,
@@ -119,6 +122,7 @@ class CharactersCommandsViewModel {
         final currentlist = state.state.value;
         final newList = currentlist.map((c) => c.id == updatedCharacter.id ? updatedCharacter : c).toList();
         state.state.value = newList;
+        state.selectedCharacter.value = null;
       },
       onFailure: (err) =>
           state.setMessage(err.msg), // registra o erro no estado
@@ -140,4 +144,10 @@ class CharactersCommandsViewModel {
     state.clearMessage(); // Limpa mensagens anteriores
     await _createCharacterCommand.executeWith((character: character));
   }
+
+  Future<void> updateCharacter(Character character) async {
+    state.clearMessage(); // Limpa mensagens anteriores
+    await _updateCharacterCommand.executeWith((character: character));
+  }
+
 }

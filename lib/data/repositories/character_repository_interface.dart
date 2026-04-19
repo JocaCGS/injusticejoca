@@ -6,5 +6,5 @@ abstract interface class ICharacterRepository {
   Future<ListCharacterResult> getAllCharacters();
   Future<CharacterResult> saveCharacter(Character character);
   Future<CharacterResult> deleteCharacter(String id);
-  Future<CharacterResult> updateCharacter(String id);
+  Future<CharacterResult> updateCharacter(Character character);
 }

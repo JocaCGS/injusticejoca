@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../../../../helper_dev/fakes/character_factory.dart';
+import 'package:injustice_app/core/routes/app_routes.dart';
 import '../../../../controllers/characters_view_model.dart';
 import 'package:signals_flutter/signals_flutter.dart';
+import 'package:go_router/go_router.dart';
+
 
 class CharactersFab extends StatelessWidget {
   final CharactersViewModel viewModel;
 
   const CharactersFab({super.key, required this.viewModel});
-
+  
   @override
   Widget build(BuildContext context) {
     return Watch((context) {
@@ -18,8 +20,8 @@ class CharactersFab extends StatelessWidget {
         onPressed: isExecuting
             ? null
             : () async {
-                final character = CharacterFactory.list(1).first;
-                await viewModel.commands.addCharacter(character);
+                viewModel.charactersState.selectedCharacter.value = null;
+                await context.pushNamed(AppRouteNames.charactersCreate);
               },
         child: isExecuting
             ? const SizedBox(

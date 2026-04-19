@@ -18,6 +18,8 @@ extension SortByExtension on SortBy {
   }
 }
 
+
+
 enum SortOrder { ascending, descending }
 
 enum LevelFilter { all, below30, below60, upTo70, max80 }
@@ -58,15 +60,29 @@ extension LevelFilterExtension on LevelFilter {
   }
 }
 
+enum CharacterSuccessEvent { created, updated}
+
 class CharactersStateViewmodel {
   /// Estado da Lista de Personagens, inicializada como nula
   final state = Signal<List<Character>>([]);
+
+  final selectedCharacter = signal<Character?>(null);
+
+  final successEvent = signal<CharacterSuccessEvent?>(null);
 
   /// Mensagem de erro ou aviso, inicializada como nula
   final message = signal<String?>(null);
 
   /// Indica se o painel de filtros está expandido ou não
   final isFilterPanelExpanded = signal(false);
+
+  late final hasCharacter = computed(() => state.value.isNotEmpty);
+
+  late final isEditing = computed(() => selectedCharacter.value != null);
+
+  late final labelEditMode = computed(
+    () => isEditing.value ? 'SALVAR' : 'CRIAR',
+  );
 
   /// Ordenação
   final sortBy = signal<SortBy>(SortBy.name);
@@ -231,4 +247,8 @@ class CharactersStateViewmodel {
     selectedAlignments.value = {};
     levelFilter.value = LevelFilter.all;
   }
+
+  void clearSuccessEvent() => successEvent.value = null;
+
+  
 }
