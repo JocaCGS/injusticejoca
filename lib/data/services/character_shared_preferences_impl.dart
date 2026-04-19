@@ -128,9 +128,8 @@ Future<CharacterResult> updateCharacter(Character character) async {
     
     return await currentResult.fold(
       onSuccess: (characters) async {
-        // Mapeia a lista trocando o antigo pelo novo
         final updatedList = characters.map((c) => c.id == character.id ? character : c).toList();
-
+        
         await _saveCharacters(updatedList);
         return Success(character);
       },
