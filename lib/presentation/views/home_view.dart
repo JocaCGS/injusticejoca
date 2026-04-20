@@ -111,7 +111,12 @@ class _HomeViewState extends State<HomeView> {
 
   /// Constrói o conteúdo com dados da conta
   Widget _accountHeaderCard(BuildContext context) {
-    final account = _vmAccount.accountState.state.value!;
+    final account = _vmAccount.accountState.state.value;
+
+    if(account == null) {
+      return const Center(child: Text('Carregando dados da conta...'));
+    }
+    
     // final account = AccountFactory.single();
     // final account = _viewModel.currentAccount.value!;
 
@@ -196,10 +201,12 @@ class _HomeViewState extends State<HomeView> {
             // Botão para ver personagens
             Center(
               child: FilledButton.icon(
-                onPressed: () => context.goNamed(AppRouteNames.characters),
+                onPressed: _vmAccount.accountState.state.value != null
+                    ? () => context.goNamed(AppRouteNames.characters, extra: account)
+                    : null, 
                 // onPressed: () => context.push(AppRoutes.personagens),
                 icon: const Icon(Icons.people),
-                label: const Text('Ver Meus Personagens'),
+                label: const Text('Ver Meus Personagens'),  
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.xl,

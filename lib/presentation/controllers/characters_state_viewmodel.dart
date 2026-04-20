@@ -84,6 +84,11 @@ class CharactersStateViewmodel {
     () => isEditing.value ? 'SALVAR' : 'CRIAR',
   );
 
+
+  late final labelEditModeIcon = computed(
+      () => isEditing.value ? 'Altere' : 'Crie',
+    );
+
   /// Ordenação
   final sortBy = signal<SortBy>(SortBy.name);
   final sortOrder = signal<SortOrder>(SortOrder.ascending);

@@ -11,15 +11,12 @@ import '../widgets/app_drawer.dart';
 import '../widgets/input_text_field.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
-
-
 class CharacterCreateView extends StatefulWidget {
   const CharacterCreateView({super.key});
 
   @override
   State<CharacterCreateView> createState() => _CharacterCreateViewState();
 }
-
 
 class _CharacterCreateViewState extends State<CharacterCreateView> {
   late final CharactersViewModel _vmCharacter;
@@ -30,7 +27,6 @@ class _CharacterCreateViewState extends State<CharacterCreateView> {
   final ScrollController _scrollController = ScrollController();
 
   late final CharacterFormFieldsController _formFields;
-  
 
   String _selectedClass = 'Poderoso';
 
@@ -43,7 +39,6 @@ class _CharacterCreateViewState extends State<CharacterCreateView> {
   int _stars = 4;
   int _threat = 2;
   CharacterAlignment _alignment = CharacterAlignment.heroi;
-
 
   final List<String> _classes = [
     'Poderoso',
@@ -61,13 +56,13 @@ class _CharacterCreateViewState extends State<CharacterCreateView> {
     _vmCharacter.charactersState.clearMessage();
     _vmCharacter.charactersState.clearFilters();
 
-    _disposeCharacterEffect = effect(()  {
+    _disposeCharacterEffect = effect(() {
       final character = _vmCharacter.charactersState.selectedCharacter.value;
       if (character != null) {
         _preencherCampos(character);
-        } else{
-          _limparCampos();
-        }
+      } else {
+        _limparCampos();
+      }
     });
 
     _disposeErrorEffect = effect(() {
@@ -105,7 +100,6 @@ class _CharacterCreateViewState extends State<CharacterCreateView> {
             case CharacterSuccessEvent.updated:
               message = 'Personagem atualizado com sucesso!';
               color = Colors.green;
-
           }
 
           showSnackBar(context, message, backgroundColor: color);
@@ -179,7 +173,9 @@ class _CharacterCreateViewState extends State<CharacterCreateView> {
     if (!_validateForm()) return;
 
     Character newCharacter = Character(
-      id: _vmCharacter.charactersState.isEditing.value ? _vmCharacter.charactersState.selectedCharacter.value!.id : DateTime.now().millisecondsSinceEpoch.toString(),
+      id: _vmCharacter.charactersState.isEditing.value
+          ? _vmCharacter.charactersState.selectedCharacter.value!.id
+          : DateTime.now().millisecondsSinceEpoch.toString(),
       name: _formFields.name.controller.text.trim(),
       characterClass: _selectedClassToEnum(_selectedClass),
       level: _level,
@@ -190,16 +186,18 @@ class _CharacterCreateViewState extends State<CharacterCreateView> {
       stars: _stars,
       alignment: _alignment,
       createdAt: _createdAt,
-      updatedAt: DateTime.now(), 
+      updatedAt: DateTime.now(),
     );
 
-    if(_vmCharacter.charactersState.isEditing.value) {
+    if (_vmCharacter.charactersState.isEditing.value) {
       _vmCharacter.commands.updateCharacter(newCharacter);
     } else {
       _vmCharacter.commands.addCharacter(newCharacter);
     }
 
-    print('Personagem salvo: ${newCharacter.name}, Classe: ${newCharacter.characterClass.displayName}, Nível: ${newCharacter.level}, Raridade: ${newCharacter.rarity.displayName}');
+    print(
+      'Personagem salvo: ${newCharacter.name}, Classe: ${newCharacter.characterClass.displayName}, Nível: ${newCharacter.level}, Raridade: ${newCharacter.rarity.displayName}',
+    );
 
     _resetFormView();
     Navigator.pop(context);
@@ -222,13 +220,13 @@ class _CharacterCreateViewState extends State<CharacterCreateView> {
     _selectedClass = _enumToSelectedClass(character.characterClass);
     _level = character.level;
     _rarity = character.rarity.index + 1;
-
+    _threat = character.threat;
     _attack = character.attack;
     _health = character.health;
     _stars = character.stars;
     _alignment = character.alignment;
     _createdAt = character.createdAt;
-    
+
     setState(() {});
   }
 
@@ -238,29 +236,28 @@ class _CharacterCreateViewState extends State<CharacterCreateView> {
     // _clearForm();
 
     _createdAt = DateTime.now();
-    _attack = 1;
-    _health = 100;
-    _stars = 4;
-    _threat = 2;
+    _attack = 0;
+    _health = 0;
+    _stars = 1;
+    _threat = 0;
     _alignment = CharacterAlignment.heroi;
     //temporario viu, mas tem que colocar os campos
-
 
     setState(() {});
   }
 
   void _cancelar() {
-
     _vmCharacter.charactersState.selectedCharacter.value = null;
     Navigator.pop(context);
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Watch((_) => Text(_vmCharacter.charactersState.labelEditMode.value)),
+        title: Watch(
+          (_) => Text(_vmCharacter.charactersState.labelEditMode.value),
+        ),
       ),
       drawer: AppDrawer(),
       body: GestureDetector(
@@ -281,7 +278,7 @@ class _CharacterCreateViewState extends State<CharacterCreateView> {
                 const SizedBox(height: AppSpacing.lg),
 
                 Text(
-                  'Crie seu personagem',
+                  '${_vmCharacter.charactersState.labelEditModeIcon} seu personagem',
                   style: context.textStyles.bodyMedium?.withColor(
                     Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
@@ -315,20 +312,21 @@ class _CharacterCreateViewState extends State<CharacterCreateView> {
                     ),
                   ),
                   items: _classes
-                      .map((classe) => DropdownMenuItem(
-                            value: classe,
-                            child: Text(classe),
-                          ))
+                      .map(
+                        (classe) => DropdownMenuItem(
+                          value: classe,
+                          child: Text(classe),
+                        ),
+                      )
                       .toList(),
-                  onChanged: (value) =>
-                      setState(() => _selectedClass = value!),
+                  onChanged: (value) => setState(() => _selectedClass = value!),
                 ),
 
                 const SizedBox(height: AppSpacing.md),
 
                 // LEVEL
                 AccountAttributeCard(
-                  icon: Icons.star,
+                  icon: Icons.trending_up,
                   iconColor: Theme.of(context).colorScheme.primary,
                   label: 'Nível',
                   hint: '[1, 80]',
@@ -338,18 +336,110 @@ class _CharacterCreateViewState extends State<CharacterCreateView> {
                   onChanged: (value) => setState(() => _level = value),
                 ),
 
-                const SizedBox(height: 1),
+                const SizedBox(height: AppSpacing.md),
 
                 // RARIDADE
+                DropdownButtonFormField<CharacterRarity>(
+                  value: _rarityToEnum(_rarity),
+                  decoration: InputDecoration(
+                    labelText: 'Raridade',
+                    prefixIcon: const Icon(Icons.workspace_premium),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  items: CharacterRarity.values.map((rarity) {
+                    return DropdownMenuItem(
+                      value: rarity,
+                      child: Text(rarity.displayName),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() => _rarity = value.index + 1);
+                    }
+                  },
+                ),
+
+                 const SizedBox(height: AppSpacing.md),
+
+                // AMEAÇA
                 AccountAttributeCard(
-                  icon: Icons.workspace_premium,
+                  icon: Icons.warning,
+                  iconColor: Colors.red,
+                  label: 'Ameaça',
+                  hint: '[0, 100]',
+                  minValue: 0,
+                  maxValue: 100,
+                  value: _threat,
+                  onChanged: (value) => setState(() => _threat = value),
+                ),
+
+                const SizedBox(height: AppSpacing.md),
+
+                // ATAQUE
+                AccountAttributeCard(
+                  icon: Icons.gps_fixed,
+                  iconColor: Colors.yellow,
+                  label: 'Ataque',
+                  hint: '[0, 100]',
+                  minValue: 0,
+                  maxValue: 100,
+                  value: _attack,
+                  onChanged: (value) => setState(() => _attack = value),
+                ),
+
+                const SizedBox(height: AppSpacing.md),
+
+                // VIDA
+                AccountAttributeCard(
+                  icon: Icons.monitor_heart,
+                  iconColor: Colors.redAccent,
+                  label: 'Vida',
+                  hint: '[0, 100]',
+                  minValue: 0,
+                  maxValue: 100,
+                  value: _health,
+                  onChanged: (value) => setState(() => _health = value),
+                ),
+
+                const SizedBox(height: AppSpacing.md),
+
+                // ESTRELAS
+                AccountAttributeCard(
+                  icon: Icons.star,
                   iconColor: Colors.purple,
-                  label: 'Raridade',
-                  hint: '[1, 5]',
+                  label: 'Estrelas',
+                  hint: '[1, 14]',
                   minValue: 1,
-                  maxValue: 5,
-                  value: _rarity,
-                  onChanged: (value) => setState(() => _rarity = value),
+                  maxValue: 14,
+                  value: _stars,
+                  onChanged: (value) => setState(() => _stars = value),
+                ),
+
+                const SizedBox(height: AppSpacing.md),
+
+                // ALINHAMENTO
+                DropdownButtonFormField<CharacterAlignment>(
+                  value: _alignment,
+                  decoration: InputDecoration(
+                    labelText: 'Alinhamento',
+                    prefixIcon: const Icon(Icons.balance),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  items: CharacterAlignment.values.map((alignment) {
+                    return DropdownMenuItem(
+                      value: alignment,
+                      child: Text(alignment.displayName),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() => _alignment = value);
+                    }
+                  },
                 ),
 
                 const SizedBox(height: AppSpacing.md),
@@ -362,9 +452,8 @@ class _CharacterCreateViewState extends State<CharacterCreateView> {
                       vertical: AppSpacing.md,
                     ),
                   ),
-                  child: Text(
-                    'CRIAR',
-                    style: context.textStyles.titleMedium?.bold,
+                  child: Watch(
+                    (_) => Text(_vmCharacter.charactersState.labelEditMode.value),
                   ),
                 ),
 
@@ -394,7 +483,6 @@ class _CharacterCreateViewState extends State<CharacterCreateView> {
   }
 }
 
-
 typedef FormFieldControl = ({
   GlobalKey<FormFieldState> key,
   FocusNode focus,
@@ -407,18 +495,17 @@ class CharacterFormFieldsController {
   final FormFieldControl classe = _createField();
   final FormFieldControl level = _createField();
   final FormFieldControl rarity = _createField();
-  // final FormFieldControl attack = _createField();
-  // final FormFieldControl threat = _createField();
-  // final FormFieldControl health = _createField();
-  // final FormFieldControl stars = _createField();
+  final FormFieldControl attack = _createField();
+  final FormFieldControl threat = _createField();
+  final FormFieldControl health = _createField();
+  final FormFieldControl stars = _createField();
   // final FormFieldControl createdAt = _createField();
   // final FormFieldControl updatedAt = _createField();
-  
-  
+
   CharacterAlignment? selectedAlignment;
 
-  // List<FormFieldControl> get fields => [name, level, attack, classe, rarity, threat, health, stars, createdAt, updatedAt];
-  List<FormFieldControl> get fields => [name, level, classe, rarity];
+  List<FormFieldControl> get fields => [name, level, attack, classe, rarity, threat, health, stars];
+  // List<FormFieldControl> get fields => [name, level, classe, rarity];
 
   static FormFieldControl _createField() {
     return (
@@ -428,12 +515,12 @@ class CharacterFormFieldsController {
     );
   }
 
-void clear() {
+  void clear() {
     for (final field in fields) {
       field.controller.clear();
     }
   }
-  
+
   void dispose() {
     for (final field in fields) {
       field.focus.dispose();
