@@ -138,10 +138,16 @@ class CharacterListItem extends StatelessWidget {
                   content: Text('Deseja realmente excluir ${character.name}?'),
                   actions: [
                     TextButton(
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white, // Cor do texto
+                      ),
                       onPressed: () => Navigator.pop(context, false),
                       child: const Text('Cancelar'),
                     ),
                     TextButton(
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white, // Cor do texto
+                      ),
                       onPressed: () => Navigator.pop(context, true),
                       child: const Text('Excluir'),
                     ),
